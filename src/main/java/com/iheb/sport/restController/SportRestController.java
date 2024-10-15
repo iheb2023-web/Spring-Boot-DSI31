@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.iheb.sport.dto.SportDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,34 +21,41 @@ import com.iheb.sport.service.SportService;
 public class SportRestController {
 	@Autowired
 	SportService sportService;
-	
-	@RequestMapping(method = RequestMethod.GET)
+
+	@RequestMapping(path="all",method =RequestMethod.GET)
 	public List<SportDTO> getAllSports(){
+
 		return sportService.getAllSport();
 	}
-	
-	@RequestMapping(value = "/{id}",method = RequestMethod.GET)
+
+	@RequestMapping(value="/getbyid/{id}",method = RequestMethod.GET)
+
 	public SportDTO getSportById(@PathVariable("id") Long id) {
+
 		return sportService.getSport(id);
 	}
-	
-	@RequestMapping(method = RequestMethod.POST)
+
+	@RequestMapping(path="/addsport",method = RequestMethod.POST)
+	//@PreAuthorize("hasAuthority('ADMIN')")  fonctionne avec @EnableMethodSecurity(prePostEnabled = true) dans securityconfig
 	public SportDTO createSport(@RequestBody SportDTO sp) {
 		return sportService.saveSport(sp)
 ;	}
-	
-	@RequestMapping(method = RequestMethod.PUT)
+
+	@RequestMapping(path="/updatesport",method = RequestMethod.PUT)
 	public SportDTO updateSport(@RequestBody SportDTO sp) {
+
 		return sportService.updateSport(sp);
 	}
-	
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+
+	@RequestMapping(value="/delsport/{id}",method = RequestMethod.DELETE)
 	public void deleteSport(@PathVariable("id") Long id) {
+
 		sportService.deletSportById(id);
 	}
 
 	@RequestMapping(value = "/sportsgen/{idGen}", method = RequestMethod.GET)
 	public List<sport> getSportByCatId(@PathVariable("idGen") Long idGen) {
+
 		return sportService.findByGenreIdGen(idGen);
 	}
 

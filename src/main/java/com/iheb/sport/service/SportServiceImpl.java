@@ -1,13 +1,13 @@
 package com.iheb.sport.service;
 
-import java.util.Date;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.iheb.sport.dto.SportDTO;
+import com.iheb.sport.repos.GenreRepository;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,23 +22,32 @@ public class SportServiceImpl  implements SportService{
 	 SportRepository sportRepository;
 
 	 @Autowired
+	 GenreRepository genreRepository;
+
+	 @Autowired
 	ModelMapper modelMapper;
-	 
-	 public SportDTO saveSport(SportDTO s) {
+
+	//@PreAuthorize("hasAuthority('ADMIN')") // fonctionne avec @EnableMethodSecurity(prePostEnabled = true) dans securityconfig
+	@Override
+	public SportDTO saveSport(SportDTO s) {
+
 
 		 return convertEntityToDto(sportRepository.save(convertDtoToEntity(s)));
 	 }
-	 
+	 @Override
 	 public void deletSport(sport s) {
 		  sportRepository.delete(s);
 	 }
+	 @Override
 	 public void deletSportById(long id) {
 		 sportRepository.deleteById(id);
 	 }
+	 @Override
 	 public SportDTO getSport(long id) {
 		 return convertEntityToDto(sportRepository.findById(id).get());
 	 }
-	 
+
+	 @Override
 	 public List<SportDTO> getAllSport() {
          /*recupere tout les entites sport de bd et les convertire en objets sportDto puis renvoi la liste de ces objets DTO*/
 		 return sportRepository.findAll().stream()
@@ -51,12 +60,13 @@ public class SportServiceImpl  implements SportService{
 			listprodDto.add(convertEntityToDto(p));
 			return listprodDto;*/
 	 }
+	 @Override
 	 public SportDTO updateSport(SportDTO p) {
 
 		 return convertEntityToDto(sportRepository.save(convertDtoToEntity(p)));
 		 }
 	 
-	  
+	  @Override
 	 public List<sport> findByNomSport(String nom) { 
 	  return sportRepository.findByNomSport(nom); 
 	 } 
@@ -127,6 +137,12 @@ public class SportServiceImpl  implements SportService{
 		 */
 		 sp = modelMapper.map(sdt, sport.class);
 		 	return sp;
+	}
+
+
+	public Genre saveGenre(Genre s) {
+
+		return genreRepository.save(s);
 	}
 
 

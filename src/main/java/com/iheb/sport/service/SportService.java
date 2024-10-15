@@ -27,4 +27,6 @@ public interface SportService {
 	SportDTO convertEntityToDto (sport sp);
 	sport convertDtoToEntity(SportDTO sdt);
 
+	Genre saveGenre(Genre s);
+
 }
